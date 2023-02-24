@@ -16,8 +16,8 @@ def main():
     input = args.i
 
     if validateInput(input):
-        generateContent(input)
-        generateKeywords(input)
+        print(generateContent(input))
+        print(generateKeywords(input))
     else:
         print("your input is too long! must be under 30 characters")
 
@@ -27,14 +27,14 @@ def generateContent(input : str) -> str:
     prompt = f'generate a upbeat and catchy branding snippet for {input}'
     response = openai.Completion.create(
         engine="text-davinci-003", prompt=prompt, max_tokens=32)
-    print(getContent(response))
+    return getContent(response)
 
 
-def generateKeywords(input: str):
+def generateKeywords(input: str) -> list[str]:
     prompt = f'generate related branding keywords for {input} in a string format and in lowercase'
     response = openai.Completion.create(
     engine="text-davinci-003", prompt=prompt, max_tokens=40)
-    print(parseKeywords(response))
+    return parseKeywords(response)
 
 
 
@@ -54,7 +54,7 @@ def getContent(response : dict) -> str:
         
 
 
-def parseKeywords(response: dict):
+def parseKeywords(response: dict) -> list[str]:
     content = response.get('choices')[0].get('text')
     content = content.strip().strip("\"")
     keywords = content.split(",")
